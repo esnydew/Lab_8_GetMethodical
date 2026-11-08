@@ -1,15 +1,13 @@
 import java.util.Scanner;
+import java.util.List;
 
 public class SafeInput {
     /**
-     * Array referenced and used by the getYNConfirm method.
+     * Lists referenced and used by the getYNConfirm method.
      * Class-level so instantiation is done only once and not on every call of the getYNConfirm method.
-     * Row 0 = valid yes responses; Row 1 = valid no responses;
      */
-    private static final String[][] VALID_RESPONSES = {
-            {"y", "yes"},
-            {"n", "no"}
-    };
+    private static final List<String> yesResponses = List.of("yes", "y");
+    private static final List<String> noResponses = List.of("no", "n");
 
     /**
      * A method to validate user input for a string that needs to be a non-zero length.
@@ -117,14 +115,13 @@ public class SafeInput {
         while(true) {
             System.out.printf("%s (Y/N)>> ", prompt);
             String userInput = pipe.nextLine().strip();
-            for(int i = 0; i < VALID_RESPONSES.length; i++) {
-                for(int j = 0; j < VALID_RESPONSES[i].length; j++) {
-                    if(userInput.equalsIgnoreCase(VALID_RESPONSES[i][j])) {
-                        return i == 0; // If the row number equals 0, the valid 'yes' answers row, then it returns true. If not, it returns false.
-                    }
-                }
+            if(yesResponses.contains(userInput.toLowerCase())) {
+                return true;
+            } else if(noResponses.contains(userInput.toLowerCase())) {
+                return false;
+            } else {
+                System.out.printf("'%s' is not a valid input (must be yes or no)! Please try again!%n", userInput);
             }
-            System.out.printf("'%s' is not a valid input (must be yes or no)! Please try again!%n", userInput);
         }
     }
 
